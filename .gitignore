@@ -1,0 +1,12 @@
+node_modules/
+.next/
+.env
+*.log
+coverage/
+
+.env.*
+!.env.example
+*.tsbuildinfo
+artifacts/
+
+.next-test/

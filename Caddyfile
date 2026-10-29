@@ -1,0 +1,9 @@
+{$PUBLIC_HOST} {
+  header Strict-Transport-Security "max-age=31536000; includeSubDomains"
+  request_body {
+    max_size 10MB
+  }
+  reverse_proxy localhost:3000 {
+    flush_interval -1
+  }
+}

@@ -1,0 +1,13 @@
+CREATE TABLE "Session" ("id" TEXT PRIMARY KEY,"tokenHash" TEXT NOT NULL,"createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,"expiresAt" TIMESTAMP(3) NOT NULL);
+CREATE UNIQUE INDEX "Session_tokenHash_key" ON "Session"("tokenHash");
+CREATE INDEX "Session_expiresAt_idx" ON "Session"("expiresAt");
+CREATE TABLE "TemporaryInbox" ("id" TEXT PRIMARY KEY,"emailAddress" TEXT NOT NULL,"sessionId" TEXT NOT NULL,"createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,"expiresAt" TIMESTAMP(3) NOT NULL,"status" TEXT NOT NULL DEFAULT 'active',CONSTRAINT "TemporaryInbox_sessionId_fkey" FOREIGN KEY ("sessionId") REFERENCES "Session"("id") ON DELETE CASCADE ON UPDATE CASCADE);
+CREATE UNIQUE INDEX "TemporaryInbox_emailAddress_key" ON "TemporaryInbox"("emailAddress");
+CREATE UNIQUE INDEX "TemporaryInbox_sessionId_key" ON "TemporaryInbox"("sessionId");
+CREATE INDEX "TemporaryInbox_expiresAt_status_idx" ON "TemporaryInbox"("expiresAt","status");
+CREATE TABLE "EmailMessage" ("id" TEXT PRIMARY KEY,"inboxId" TEXT NOT NULL,"providerMessageId" TEXT NOT NULL,"sender" TEXT NOT NULL,"recipient" TEXT NOT NULL,"subject" TEXT NOT NULL,"textBody" TEXT NOT NULL,"sanitizedHtmlBody" TEXT NOT NULL,"receivedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,"isRead" BOOLEAN NOT NULL DEFAULT false,CONSTRAINT "EmailMessage_inboxId_fkey" FOREIGN KEY ("inboxId") REFERENCES "TemporaryInbox"("id") ON DELETE CASCADE ON UPDATE CASCADE);
+CREATE UNIQUE INDEX "EmailMessage_inboxId_providerMessageId_key" ON "EmailMessage"("inboxId","providerMessageId");
+CREATE INDEX "EmailMessage_inboxId_receivedAt_idx" ON "EmailMessage"("inboxId","receivedAt");
+CREATE TABLE "EmailAttachment" ("id" TEXT PRIMARY KEY,"messageId" TEXT NOT NULL,"filename" TEXT NOT NULL,"contentType" TEXT NOT NULL,"fileSize" INTEGER NOT NULL,"storageKey" TEXT NOT NULL,"data" BYTEA NOT NULL,"scanStatus" TEXT NOT NULL DEFAULT 'clean',CONSTRAINT "EmailAttachment_messageId_fkey" FOREIGN KEY ("messageId") REFERENCES "EmailMessage"("id") ON DELETE CASCADE ON UPDATE CASCADE);
+CREATE UNIQUE INDEX "EmailAttachment_storageKey_key" ON "EmailAttachment"("storageKey");
+CREATE TABLE "Setting" ("key" TEXT PRIMARY KEY,"value" INTEGER NOT NULL);

@@ -1,0 +1,46 @@
+{
+  "name": "flashmail",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --webpack --hostname 0.0.0.0",
+    "build": "npm run db:generate && next build --webpack",
+    "start": "next start --hostname 0.0.0.0",
+    "db:migrate": "tsx scripts/migrate.ts",
+    "worker": "tsx scripts/worker.ts",
+    "test": "node --env-file=.env.test --import tsx --test tests/*.test.ts",
+    "db:generate": "tsx scripts/generate.ts",
+    "db:migrate:prisma": "prisma migrate deploy",
+    "test:browser": "tsx scripts/browser-check.ts"
+  },
+  "dependencies": {
+    "@prisma/adapter-pg": "^7.10.1",
+    "@prisma/client": "^7.10.1",
+    "dotenv": "^18.0.9",
+    "lucide-react": "^0.468.0",
+    "next": "^16.4.3",
+    "pg": "^8.23.1",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "redis": "^5.9.0",
+    "sanitize-html": "^2.17.0",
+    "zod": "^4.1.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.64.1",
+    "@prisma/client-generator-registry": "^7.10.1",
+    "@prisma/internals": "^7.10.1",
+    "@tailwindcss/postcss": "^4.1.0",
+    "@types/node": "^22.0.0",
+    "@types/pg": "^8.23.1",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@types/sanitize-html": "^2.16.0",
+    "prettier": "^3.9.10",
+    "prisma": "^7.10.1",
+    "tailwindcss": "^4.1.0",
+    "tsx": "^4.20.0",
+    "typescript": "^5.9.0"
+  },
+  "type": "module"
+}
